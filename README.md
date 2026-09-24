@@ -11,8 +11,8 @@ Proyecto desarrollado para el curso de **Desarrollo Frontend con React** en **Ta
 
 ## 🚀 Despliegue en Vivo y Repositorio
 
-- **Sitio Web (Deploy):** _[Pega aquí el enlace de tu sitio en Netlify o Vercel]_
-- **Repositorio en GitHub:** _[Pega aquí el enlace a este repositorio]_
+- **Sitio Web (Deploy):** [https://ecommerce-talentotech-v1.vercel.app](https://ecommerce-talentotech-v1.vercel.app)
+- **Repositorio en GitHub:** [https://github.com/Leo-apu/E-commerce_TalentoTech-v1](https://github.com/Leo-apu/E-commerce_TalentoTech-v1)
 
 ---
 
