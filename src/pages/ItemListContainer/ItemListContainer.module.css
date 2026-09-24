@@ -1,0 +1,114 @@
+.contenedor {
+  width: 100%;
+}
+
+.cabeceraCategoria {
+  max-width: 1140px;
+  margin: 2rem auto 0;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.tituloCategoria {
+  margin: 0;
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: var(--color-text);
+  text-transform: capitalize;
+  letter-spacing: -0.02em;
+}
+
+.conteoCategoria {
+  font-size: 0.88rem;
+  color: var(--color-text-secondary);
+  font-weight: 500;
+}
+
+.loadingContenedor {
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.spinner {
+  width: 44px;
+  height: 44px;
+  border: 3px solid var(--color-border);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.mensajeCargando {
+  font-size: 0.95rem;
+  color: var(--color-text-secondary);
+  font-weight: 500;
+}
+
+.estadoMensaje {
+  max-width: 440px;
+  margin: 5rem auto;
+  padding: 2.5rem 1.5rem;
+  text-align: center;
+  background-color: var(--color-surface);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.iconoAlerta {
+  color: var(--color-accent);
+  margin-bottom: 1rem;
+}
+
+.iconoVacio {
+  color: var(--color-text-tertiary);
+  margin-bottom: 1rem;
+}
+
+.estadoMensaje h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.estadoMensaje p {
+  margin: 0 0 1.5rem;
+  font-size: 0.92rem;
+  color: var(--color-text-secondary);
+}
+
+.botonReintentar,
+.botonVolverInicio {
+  background-color: var(--color-primary);
+  color: var(--color-text-inverse);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.92rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-full);
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.botonReintentar:hover,
+.botonVolverInicio:hover {
+  background-color: var(--color-primary-hover);
+  transform: translateY(-2px);
+}
