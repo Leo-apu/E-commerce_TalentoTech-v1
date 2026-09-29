@@ -63,10 +63,12 @@ Proyecto desarrollado para el curso de **Desarrollo Frontend con React** en **Ta
 
 ### 6. 🛒 Carrito de Compras Dual (`CartContext.jsx`)
 
-- **Estado Global Reactivo:** Contexto unificado que almacena artículos, cantidades, subtotales y total general con persistencia en `localStorage`.
+- **Estado Global Reactivo:** Contexto unificado que almacena artículos, validación de existencia (`isInCart`), control de cantidades, subtotales y total general con persistencia en `localStorage`.
 - **CartWidget:** Indicador en la barra de navegación con contador de unidades.
 - **CartDrawer:** Panel lateral deslizable para revisar compras rápidas sin abandonar la página actual, con barra de progreso interactiva hacia el beneficio de **Envío Gratis**.
-- **Página Completa del Carrito (`/carrito`):** Desglose detallado de ítems, controles incrementales (+ / -), aviso de cuánto dinero resta para alcanzar el envío gratuito (a partir de $50.000), garantías de compra segura y botón de vaciado total.
+- **Página Completa Modular (`/carrito`):**
+  - `CartEmpty`: Vista de contingencia con mensaje amigable y llamada a la acción hacia el catálogo cuando no hay artículos.
+  - `CartContent`: Desglose detallado de ítems, controles incrementales (+ / -), aviso de cuánto dinero resta para alcanzar el envío gratuito (a partir de $50.000), garantías de compra segura y botón de checkout.
 
 ### 7. 🛡️ Panel de Administración (`AdminLayout.jsx` & `AdminDashboardPage.jsx`)
 
@@ -161,7 +163,7 @@ ecommerce/
 │   │   └── AdminLayout.jsx        # Layout para el panel de administración con sidebar
 │   ├── pages/
 │   │   ├── Admin/                 # Dashboard y métricas administrativas
-│   │   ├── Cart/                  # Vista completa del carrito de compras
+│   │   ├── Cart/                  # Vista del carrito (CartPage, CartContent, CartEmpty)
 │   │   ├── Favoritos/             # Vista de productos guardados
 │   │   ├── Home/                  # Portada de la tienda
 │   │   ├── ItemDetailContainer/   # Contenedor de la vista de detalle

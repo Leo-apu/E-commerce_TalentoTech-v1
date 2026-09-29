@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
+import { toast } from "react-hot-toast";
 
 const CartContext = createContext();
 
@@ -22,22 +23,17 @@ export function CartProvider({ children }) {
     }
   }, [cartItems]);
 
+  const isInCart = (productoId) => {
+    return cartItems.some((item) => item.id === productoId);
+  };
+
   const addToCart = (producto, cantidad = 1) => {
-    setCartItems((prevItems) => {
-      const existingIndex = prevItems.findIndex(
-        (item) => item.id === producto.id,
-      );
-      if (existingIndex > -1) {
-        const updated = [...prevItems];
-        updated[existingIndex] = {
-          ...updated[existingIndex],
-          cantidad: updated[existingIndex].cantidad + cantidad,
-        };
-        return updated;
-      } else {
-        return [...prevItems, { ...producto, cantidad }];
-      }
-    });
+    if (isInCart(producto.id)) {
+      toast.error(`El producto ${producto.nombre} ya esta en el carrito`);
+      return;
+    }
+    toast.success(`${cantidad} x ${producto.nombre} agregado al carrito`);
+    setCartItems([...cartItems, { ...producto, cantidad }]);
   };
 
   const removeFromCart = (id) => {
@@ -79,6 +75,7 @@ export function CartProvider({ children }) {
     <CartContext.Provider
       value={{
         cartItems,
+        isInCart,
         addToCart,
         removeFromCart,
         updateQuantity,

@@ -55,7 +55,6 @@ function ItemDetail({ producto }) {
 
   const handleAddToCart = () => {
     addToCart(producto, cantidad);
-    toast.success(`${cantidad} x ${nombre} agregado al carrito`);
     openCart();
   };
 
@@ -106,7 +105,11 @@ function ItemDetail({ producto }) {
           <div className={styles.precioContenedor}>
             <p className={styles.precio}>${precio.toLocaleString("es-AR")}</p>
             <p className={styles.cuotasInfo}>
-              <FiCreditCard size={15} style={{ verticalAlign: "middle", marginRight: "0.3rem" }} /> 3 cuotas sin interés de{" "}
+              <FiCreditCard
+                size={15}
+                style={{ verticalAlign: "middle", marginRight: "0.3rem" }}
+              />{" "}
+              3 cuotas sin interés de{" "}
               <strong>${valorCuota.toLocaleString("es-AR")}</strong>
             </p>
           </div>
@@ -134,10 +137,7 @@ function ItemDetail({ producto }) {
               </button>
             </div>
 
-            <button
-              className={styles.botonAgregar}
-              onClick={handleAddToCart}
-            >
+            <button className={styles.botonAgregar} onClick={handleAddToCart}>
               <FiShoppingBag size={18} />
               <span>Agregar al carrito</span>
             </button>

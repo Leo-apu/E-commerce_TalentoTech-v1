@@ -1,6 +1,5 @@
 import { Routes, Route } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
-import { CartProvider } from "./context/CartContext.jsx";
 import Layout from "./layouts/Layout.jsx";
 import AdminLayout from "./layouts/AdminLayout.jsx";
 import HomePage from "./pages/Home/HomePage.jsx";
@@ -17,7 +16,7 @@ import ScrollToTop from "./components/ScrollToTop/ScrollToTop.jsx";
 
 function App() {
   return (
-    <CartProvider>
+    <>
       <ScrollToTop />
       <Toaster
         position="bottom-center"
@@ -62,7 +61,7 @@ function App() {
           <Route path="/admin/clientes" element={<AdminDashboardPage />} />
         </Route>
       </Routes>
-    </CartProvider>
+    </>
   );
 }
 

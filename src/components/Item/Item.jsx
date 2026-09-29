@@ -52,7 +52,6 @@ function Item({ producto, paginaActual }) {
     addToCart(producto, 1);
     setAgregadoAnim(true);
     setTimeout(() => setAgregadoAnim(false), 1400);
-    toast.success(`${nombre} agregado al carrito`);
   };
 
   const valorCuota = Math.round(precio / 3);
