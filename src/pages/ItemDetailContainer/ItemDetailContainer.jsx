@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { FiAlertCircle, FiArrowLeft } from "react-icons/fi";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../../firebase/config.js";
 import ItemDetail from "../../components/ItemDetail/ItemDetail.jsx";
 import styles from "./ItemDetailContainer.module.css";
 
@@ -12,18 +14,25 @@ function ItemDetailContainer() {
 
   useEffect(() => {
     setCargando(true);
-    fetch("/productos.json")
-      .then((respuesta) => {
-        if (!respuesta.ok) throw new Error("No se pudo cargar el producto");
-        return respuesta.json();
-      })
-      .then((data) => {
-        const encontrado = data.find((p) => p.id === Number(id));
-        setProducto(encontrado || null);
+    setError(null);
+
+    const docRef = doc(db, "productos", id);
+
+    getDoc(docRef)
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          setProducto({
+            id: snapshot.id,
+            ...snapshot.data(),
+          });
+        } else {
+          setProducto(null);
+        }
         setCargando(false);
       })
       .catch((err) => {
-        setError(err.message);
+        console.error("Error al obtener detalle de producto desde Firebase:", err);
+        setError("No se pudo cargar la información del producto.");
         setCargando(false);
       });
   }, [id]);

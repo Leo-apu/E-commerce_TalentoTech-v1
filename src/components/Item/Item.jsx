@@ -10,7 +10,7 @@ function Item({ producto, paginaActual }) {
   const { id, nombre, precio, imagen, categoria } = producto;
   const [isFavorite, setIsFavorite] = useState(false);
   const [agregadoAnim, setAgregadoAnim] = useState(false);
-  const { addToCart } = useCart();
+  const { addToCart, openCart } = useCart();
   const location = useLocation();
 
   useEffect(() => {
@@ -52,6 +52,7 @@ function Item({ producto, paginaActual }) {
     addToCart(producto, 1);
     setAgregadoAnim(true);
     setTimeout(() => setAgregadoAnim(false), 1400);
+    openCart();
   };
 
   const valorCuota = Math.round(precio / 3);

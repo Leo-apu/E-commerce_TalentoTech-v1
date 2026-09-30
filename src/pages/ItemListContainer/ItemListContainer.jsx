@@ -4,6 +4,9 @@ import { FiAlertCircle, FiInbox } from "react-icons/fi";
 import ItemList from "../../components/ItemList/ItemList.jsx";
 import styles from "./ItemListContainer.module.css";
 
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from "../../firebase/config.js";
+
 function ItemListContainer() {
   const { categoria } = useParams();
   const [productos, setProductos] = useState([]);
@@ -12,21 +15,30 @@ function ItemListContainer() {
 
   useEffect(() => {
     setCargando(true);
-    fetch("/productos.json")
-      .then((res) => {
-        if (!res.ok)
-          throw new Error("No se pudo obtener el listado de productos");
-        return res.json();
-      })
-      .then((data) => {
-        setProductos(data);
+    setError(null);
+
+    const productosRef = collection(db, "productos");
+    const consulta = categoria
+      ? query(productosRef, where("categoria", "==", categoria.toLowerCase()))
+      : productosRef;
+
+    getDocs(consulta)
+      .then((snapshot) => {
+        const productosFirebase = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setProductos(productosFirebase);
         setCargando(false);
       })
       .catch((err) => {
-        setError(err.message);
+        console.error("Error al cargar productos desde Firebase:", err);
+        setError(
+          "No se pudieron obtener los productos desde la base de datos.",
+        );
         setCargando(false);
       });
-  }, []);
+  }, [categoria]);
 
   if (cargando) {
     return (
@@ -55,13 +67,7 @@ function ItemListContainer() {
     );
   }
 
-  const productosFiltrados = categoria
-    ? productos.filter(
-        (p) => p.categoria.toLowerCase() === categoria.toLowerCase(),
-      )
-    : productos;
-
-  if (productosFiltrados.length === 0) {
+  if (productos.length === 0) {
     return (
       <div className={styles.estadoMensaje}>
         <div className={styles.iconoVacio}>
@@ -82,11 +88,11 @@ function ItemListContainer() {
         <div className={styles.cabeceraCategoria}>
           <h2 className={styles.tituloCategoria}>{categoria}</h2>
           <span className={styles.conteoCategoria}>
-            {productosFiltrados.length} productos disponibles
+            {productos.length} productos disponibles
           </span>
         </div>
       )}
-      <ItemList productos={productosFiltrados} />
+      <ItemList productos={productos} />
     </div>
   );
 }
