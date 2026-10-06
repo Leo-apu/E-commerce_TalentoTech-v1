@@ -11,6 +11,7 @@ import Login from "./pages/Login/Login.jsx";
 import RegisterPage from "./pages/Register/RegisterPage.jsx";
 import ProfilePage from "./pages/Profile/ProfilePage.jsx";
 import AdminDashboardPage from "./pages/Admin/AdminDashboardPage.jsx";
+import AdminProductosPage from "./pages/Admin/AdminProductosPage.jsx";
 import NotFoundPage from "./pages/NotFound/NotFoundPage.jsx";
 import ScrollToTop from "./components/ScrollToTop/ScrollToTop.jsx";
 
@@ -56,7 +57,7 @@ function App() {
 
         <Route element={<AdminLayout />}>
           <Route path="/admin" element={<AdminDashboardPage />} />
-          <Route path="/admin/productos" element={<AdminDashboardPage />} />
+          <Route path="/admin/productos" element={<AdminProductosPage />} />
           <Route path="/admin/pedidos" element={<AdminDashboardPage />} />
           <Route path="/admin/clientes" element={<AdminDashboardPage />} />
         </Route>

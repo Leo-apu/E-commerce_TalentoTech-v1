@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
-import ReactPaginate from "react-paginate";
-import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
-import Item from "../Item/Item.jsx";
-import styles from "./ItemList.module.css";
 import { useLocation } from "react-router-dom";
+import Item from "../Item/Item.jsx";
+import Pagination from "../Pagination/Pagination.jsx";
+import styles from "./ItemList.module.css";
 
 const PRODUCTOS_POR_PAGINA = 12;
 
@@ -27,8 +26,8 @@ function ItemList({ productos }) {
   );
   const totalPaginas = Math.ceil(productos.length / PRODUCTOS_POR_PAGINA);
 
-  const handlePageChange = (evento) => {
-    setPaginaActual(evento.selected);
+  const handlePageChange = (paginaSeleccionada) => {
+    setPaginaActual(paginaSeleccionada);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -44,28 +43,12 @@ function ItemList({ productos }) {
         ))}
       </div>
 
-      {totalPaginas > 1 && (
-        <ReactPaginate
-          previousLabel={<FiChevronLeft size={18} />}
-          nextLabel={<FiChevronRight size={18} />}
-          pageCount={totalPaginas}
-          forcePage={paginaActual}
-          onPageChange={handlePageChange}
-          marginPagesDisplayed={1}
-          pageRangeDisplayed={4}
-          containerClassName={styles.paginacion}
-          pageClassName={styles.pagina}
-          pageLinkClassName={styles.paginaLink}
-          activeClassName={styles.paginaActiva}
-          previousClassName={styles.pagina}
-          nextClassName={styles.pagina}
-          previousLinkClassName={`${styles.paginaLink} ${styles.paginaNav}`}
-          nextLinkClassName={`${styles.paginaLink} ${styles.paginaNav}`}
-          disabledClassName={styles.paginaDeshabilitada}
-          breakClassName={styles.pagina}
-          breakLinkClassName={styles.paginaLink}
-        />
-      )}
+      <Pagination
+        pageCount={totalPaginas}
+        currentPage={paginaActual}
+        onPageChange={handlePageChange}
+        pageRangeDisplayed={4}
+      />
     </div>
   );
 }
