@@ -3,9 +3,11 @@ import { NavLink, Link, useLocation } from "react-router-dom";
 import { FiMenu, FiX, FiHeart, FiSettings } from "react-icons/fi";
 import CartWidget from "../CartWidget/CartWidget.jsx";
 import UserDropdown from "../UserDropdown/UserDropdown.jsx";
+import { useAuth } from "../../../context/AuthContext.jsx";
 import styles from "./Navbar.module.css";
 
 function Navbar() {
+  const { user } = useAuth();
   const [menuAbierto, setMenuAbierto] = useState(false);
   const [favCount, setFavCount] = useState(0);
   const location = useLocation();
@@ -88,17 +90,19 @@ function Navbar() {
         </ul>
 
         <div className={styles.iconos}>
-          <NavLink
-            to="/admin"
-            className={({ isActive }) =>
-              `${styles.actionBtn} ${isActive ? styles.actionActivo : ""}`
-            }
-            title="Panel de Administración"
-            aria-label="Panel de Administración"
-            onClick={cerrarMenu}
-          >
-            <FiSettings size={19} />
-          </NavLink>
+          {user?.rol === "admin" && (
+            <NavLink
+              to="/admin"
+              className={({ isActive }) =>
+                `${styles.actionBtn} ${isActive ? styles.actionActivo : ""}`
+              }
+              title="Panel de Administración"
+              aria-label="Panel de Administración"
+              onClick={cerrarMenu}
+            >
+              <FiSettings size={19} />
+            </NavLink>
+          )}
 
           <NavLink
             to="/favoritos"
@@ -120,5 +124,6 @@ function Navbar() {
     </header>
   );
 }
+
 
 export default Navbar;

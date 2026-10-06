@@ -3,7 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { FiAlertCircle, FiArrowLeft } from "react-icons/fi";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../firebase/config.js";
-import ItemDetail from "../../components/ItemDetail/ItemDetail.jsx";
+import ItemDetail from "../../components/product/ItemDetail/ItemDetail.jsx";
 import styles from "./ItemDetailContainer.module.css";
 
 function ItemDetailContainer() {

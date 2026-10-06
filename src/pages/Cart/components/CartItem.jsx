@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { FiTrash2, FiPlus, FiMinus } from "react-icons/fi";
-import styles from "./CartPage.module.css";
+import styles from "../CartPage.module.css";
 
 export function CartItem({ item, onUpdateQuantity, onRemove }) {
   return (

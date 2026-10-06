@@ -1,15 +1,18 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { FiUserCheck } from "react-icons/fi";
+import { FcGoogle } from "react-icons/fc";
 import toast from "react-hot-toast";
 
 import LoginForm from "../../components/Auth/LoginForm/LoginForm.jsx";
 import { validateLoginForm } from "../../utils/validateForm.js";
-import { loginUser, getCurrentUser } from "../../services/authService.js";
+import { useAuth } from "../../context/AuthContext.jsx";
 import styles from "./Login.module.css";
 
 function Login() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { user, loginWithEmail, loginWithGoogle } = useAuth();
 
   const [formData, setFormData] = useState({
     email: "",
@@ -17,12 +20,15 @@ function Login() {
   });
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isGoogleSubmitting, setIsGoogleSubmitting] = useState(false);
+
+  const destino = location.state?.from?.pathname || "/perfil";
 
   useEffect(() => {
-    if (getCurrentUser()) {
-      navigate("/perfil");
+    if (user) {
+      navigate(destino, { replace: true });
     }
-  }, [navigate]);
+  }, [user, navigate, destino]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -46,17 +52,41 @@ function Login() {
     setErrors({});
 
     try {
-      const usuarioLogueado = await loginUser(
-        formData.email,
-        formData.password,
-      );
-      toast.success(`¡Bienvenido de nuevo, ${usuarioLogueado.nombre}!`);
-      navigate("/perfil");
+      await loginWithEmail(formData.email, formData.password);
+      toast.success("¡Inicio de sesión exitoso!");
+      navigate(destino, { replace: true });
     } catch (err) {
-      setErrors({ general: err.message || "Error al iniciar sesión" });
-      toast.error(err.message || "Error al iniciar sesión");
+      console.error(err);
+      let mensajeError = "Error al iniciar sesión. Verifica tus datos.";
+      if (
+        err.code === "auth/user-not-found" ||
+        err.code === "auth/wrong-password" ||
+        err.code === "auth/invalid-credential"
+      ) {
+        mensajeError = "Correo o contraseña incorrectos.";
+      } else if (err.code === "auth/too-many-requests") {
+        mensajeError = "Demasiados intentos fallidos. Intenta más tarde.";
+      }
+      setErrors({ general: mensajeError });
+      toast.error(mensajeError);
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    setIsGoogleSubmitting(true);
+    try {
+      await loginWithGoogle();
+      toast.success("¡Sesión iniciada con Google!");
+      navigate(destino, { replace: true });
+    } catch (err) {
+      console.error(err);
+      if (err.code !== "auth/popup-closed-by-user") {
+        toast.error("Error al iniciar sesión con Google");
+      }
+    } finally {
+      setIsGoogleSubmitting(false);
     }
   };
 
@@ -71,6 +101,24 @@ function Login() {
           <p className={styles.subtitulo}>
             Accede a tus compras, favoritos y pedidos
           </p>
+        </div>
+
+        <button
+          type="button"
+          className={styles.botonGoogle}
+          onClick={handleGoogleLogin}
+          disabled={isGoogleSubmitting || isSubmitting}
+        >
+          <FcGoogle size={20} />
+          <span>
+            {isGoogleSubmitting
+              ? "Conectando con Google..."
+              : "Continuar con Google"}
+          </span>
+        </button>
+
+        <div className={styles.divisor}>
+          <span>o ingresa con tu correo</span>
         </div>
 
         <LoginForm

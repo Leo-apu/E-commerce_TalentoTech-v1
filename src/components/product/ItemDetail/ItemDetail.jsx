@@ -13,7 +13,7 @@ import {
 } from "react-icons/fi";
 import { FaHeart } from "react-icons/fa";
 import toast from "react-hot-toast";
-import { useCart } from "../../context/CartContext";
+import { useCart } from "../../../context/CartContext";
 import styles from "./ItemDetail.module.css";
 
 function ItemDetail({ producto }) {

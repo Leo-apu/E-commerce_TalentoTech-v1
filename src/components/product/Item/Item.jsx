@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { FiHeart, FiShoppingBag, FiCheck } from "react-icons/fi";
 import { FaHeart } from "react-icons/fa";
 import toast from "react-hot-toast";
-import { useCart } from "../../context/CartContext";
+import { useCart } from "../../../context/CartContext";
 import styles from "./Item.module.css";
 
 function Item({ producto, paginaActual }) {

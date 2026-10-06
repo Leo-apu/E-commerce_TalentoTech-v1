@@ -1,11 +1,12 @@
 import { useState, useRef } from "react";
 import { FiX, FiUploadCloud, FiTrash2, FiPlusCircle, FiEdit3, FiLoader } from "react-icons/fi";
 import { collection, addDoc, doc, updateDoc } from "firebase/firestore";
-import { db } from "../../firebase/config";
-import { uploadImageToImgBB } from "../../services/imgbbService";
-import { validateProductForm } from "../../utils/validateForm";
+import { db } from "../../../firebase/config";
+import { uploadImageToImgBB } from "../../../services/imgbbService";
+import { validateProductForm } from "../../../utils/validateForm";
 import toast from "react-hot-toast";
 import styles from "./FormularioProductoModal.module.css";
+
 
 function FormularioProductoModal({ onCerrar, onProductoCreado, productoAEditar, onProductoEditado }) {
   const esModoEdicion = Boolean(productoAEditar);

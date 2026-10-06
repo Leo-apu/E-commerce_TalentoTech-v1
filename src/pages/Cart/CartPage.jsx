@@ -1,6 +1,6 @@
 import { useCart } from "../../context/CartContext";
-import { CartEmpty } from "./CartEmpty";
-import { CartContent } from "./CartContent";
+import { CartEmpty } from "./components/CartEmpty";
+import { CartContent } from "./components/CartContent";
 
 function CartPage() {
   const cartProps = useCart();

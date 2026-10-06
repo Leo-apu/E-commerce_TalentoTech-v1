@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { FiShoppingBag } from "react-icons/fi";
-import { useCart } from "../../context/CartContext";
+import { useCart } from "../../../context/CartContext";
 import styles from "./CartWidget.module.css";
 
 function CartWidget() {

@@ -1,30 +1,25 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { FiUser, FiLogIn, FiUserPlus, FiLogOut } from "react-icons/fi";
-import { getCurrentUser, logoutUser } from "../../services/authService.js";
+import { FiUser, FiLogIn, FiUserPlus, FiLogOut, FiSettings } from "react-icons/fi";
+import { useAuth } from "../../../context/AuthContext";
 import toast from "react-hot-toast";
 import styles from "./UserDropdown.module.css";
 
 function UserDropdown() {
   const [abierto, setAbierto] = useState(false);
-  const [currentUser, setCurrentUser] = useState(null);
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const syncUser = () => {
-      setCurrentUser(getCurrentUser());
-    };
-
-    syncUser();
-    window.addEventListener("storage", syncUser);
-    return () => window.removeEventListener("storage", syncUser);
-  }, []);
-
-  const handleCerrarSesion = () => {
-    logoutUser();
-    setAbierto(false);
-    toast.success("Has cerrado sesión correctamente");
-    navigate("/");
+  const handleCerrarSesion = async () => {
+    try {
+      await logout();
+      setAbierto(false);
+      toast.success("Has cerrado sesión correctamente");
+      navigate("/");
+    } catch (error) {
+      console.error(error);
+      toast.error("Error al cerrar sesión");
+    }
   };
 
   return (
@@ -37,18 +32,20 @@ function UserDropdown() {
         type="button"
         className={styles.triggerBtn}
         onClick={() => setAbierto((prev) => !prev)}
-        aria-label={currentUser ? `Menú de ${currentUser.nombre}` : "Mi Cuenta"}
+        aria-label={user ? `Menú de ${user.nombre}` : "Mi Cuenta"}
         aria-expanded={abierto}
       >
-        {currentUser?.avatarUrl ? (
+        {user?.avatarUrl ? (
           <img
-            src={currentUser.avatarUrl}
-            alt={currentUser.nombre}
+            src={user.avatarUrl}
+            alt={user.nombre}
             className={styles.avatarNav}
+            referrerPolicy="no-referrer"
           />
         ) : (
           <FiUser size={21} className={styles.userIconNav} />
         )}
+
       </button>
 
       {abierto && (
@@ -58,12 +55,22 @@ function UserDropdown() {
             onClick={() => setAbierto(false)}
           />
           <div className={styles.menuFlotante} role="menu">
-            {currentUser ? (
+            {user ? (
               <>
                 <div className={styles.headerDropdown}>
-                  <h4 className={styles.titulo}>Hola, {currentUser.nombre}</h4>
+                  <h4 className={styles.titulo}>Hola, {user.nombre}</h4>
                 </div>
                 <div className={styles.opcionesLista}>
+                  {user.rol === "admin" && (
+                    <Link
+                      to="/admin"
+                      className={styles.itemOpcion}
+                      onClick={() => setAbierto(false)}
+                    >
+                      <FiSettings size={18} className={styles.icono} />
+                      <span>Panel Admin</span>
+                    </Link>
+                  )}
                   <Link
                     to="/perfil"
                     className={styles.itemOpcion}
@@ -116,3 +123,4 @@ function UserDropdown() {
 }
 
 export default UserDropdown;
+

@@ -1,5 +1,5 @@
 import { FiX, FiShoppingBag } from "react-icons/fi";
-import { useCart } from "../../context/CartContext";
+import { useCart } from "../../../context/CartContext";
 import { CartDrawerShipping } from "./CartDrawerShipping";
 import { CartDrawerEmpty } from "./CartDrawerEmpty";
 import { CartDrawerItem } from "./CartDrawerItem";

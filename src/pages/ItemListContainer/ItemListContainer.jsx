@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { FiAlertCircle, FiInbox } from "react-icons/fi";
-import ItemList from "../../components/ItemList/ItemList.jsx";
+import ItemList from "../../components/product/ItemList/ItemList.jsx";
 import styles from "./ItemListContainer.module.css";
 
 import { collection, getDocs, query, where } from "firebase/firestore";

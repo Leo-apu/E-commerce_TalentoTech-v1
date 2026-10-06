@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import Item from "../Item/Item.jsx";
-import Pagination from "../Pagination/Pagination.jsx";
+import Pagination from "../../common/Pagination/Pagination.jsx";
 import styles from "./ItemList.module.css";
 
 const PRODUCTOS_POR_PAGINA = 12;

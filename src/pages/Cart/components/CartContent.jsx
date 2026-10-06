@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { FiTrash2, FiArrowLeft } from "react-icons/fi";
 import { CartItem } from "./CartItem";
 import { CartSummary } from "./CartSummary";
-import styles from "./CartPage.module.css";
+import styles from "../CartPage.module.css";
 
 export function CartContent({
   cartItems,

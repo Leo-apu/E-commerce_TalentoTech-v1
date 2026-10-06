@@ -1,5 +1,5 @@
 import { FiArrowRight, FiShield, FiTruck } from "react-icons/fi";
-import styles from "./CartPage.module.css";
+import styles from "../CartPage.module.css";
 import toast from "react-hot-toast";
 
 export function CartSummary({ totalPrice, totalItems }) {

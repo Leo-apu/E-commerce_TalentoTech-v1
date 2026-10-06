@@ -1,8 +1,8 @@
 import { Outlet } from "react-router-dom";
-import Header from "../components/Header/Header.jsx";
-import Navbar from "../components/Navbar/Navbar.jsx";
-import Footer from "../components/Footer/Footer.jsx";
-import CartDrawer from "../components/CartDrawer/CartDrawer.jsx";
+import Header from "../components/layout/Header/Header.jsx";
+import Navbar from "../components/layout/Navbar/Navbar.jsx";
+import Footer from "../components/layout/Footer/Footer.jsx";
+import CartDrawer from "../components/layout/CartDrawer/CartDrawer.jsx";
 
 function Layout() {
   return (
