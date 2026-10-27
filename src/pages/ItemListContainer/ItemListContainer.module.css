@@ -26,6 +26,50 @@
   font-weight: 500;
 }
 
+.cabeceraBusqueda {
+  max-width: 1140px;
+  margin: 2rem auto 0;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.tituloBusqueda {
+  margin: 0 0 0.25rem 0;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--color-text);
+  letter-spacing: -0.01em;
+}
+
+.tituloBusqueda span {
+  color: var(--color-primary);
+}
+
+.btnLimpiarBusqueda {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.9rem;
+  background-color: var(--color-surface-hover, #f1f5f9);
+  color: var(--color-text-secondary, #64748b);
+  border: 1px solid var(--color-border, #e2e8f0);
+  border-radius: var(--radius-full, 9999px);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all var(--transition-fast, 0.2s ease);
+}
+
+.btnLimpiarBusqueda:hover {
+  background-color: #fee2e2;
+  color: #dc2626;
+  border-color: #fca5a5;
+}
+
 .loadingContenedor {
   min-height: 400px;
   display: flex;
