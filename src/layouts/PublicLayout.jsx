@@ -4,7 +4,7 @@ import Navbar from "../components/layout/Navbar/Navbar.jsx";
 import Footer from "../components/layout/Footer/Footer.jsx";
 import CartDrawer from "../components/layout/CartDrawer/CartDrawer.jsx";
 
-function Layout() {
+function PublicLayout() {
   return (
     <div className="app-layout">
       <Header />
@@ -17,5 +17,4 @@ function Layout() {
     </div>
   );
 }
-
-export default Layout;
+export default PublicLayout;

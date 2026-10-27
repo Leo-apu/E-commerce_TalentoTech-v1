@@ -1,131 +1,130 @@
 # 🛍️ Mi Ecommerce - Tienda Online
 
-Plataforma de comercio electrónico moderna, rápida y 100% responsiva desarrollada con el ecosistema de **React 18** y **Vite**. Cuenta con catálogo dinámico, paginación reactiva, sistema de autenticación de usuarios con roles, panel de perfil con subida de imágenes a la nube (ImgBB), lista de favoritos, panel de administración con métricas y carrito de compras con persistencia global.
+Plataforma de comercio electrónico moderna, rápida y 100% responsiva desarrollada con el ecosistema de **React 18**, **Vite** y **Firebase** (Cloud Firestore & Firebase Authentication). Cuenta con catálogo dinámico en tiempo real, gestión de productos para administradores con subida de imágenes a la nube (ImgBB), autenticación por roles, rutas protegidas, separación de layouts, sistema de favoritos y carrito de compras global.
 
 Proyecto desarrollado para el curso de **Desarrollo Frontend con React** en **Talento Tech**.
 
-**Autor:** Leandro Victorino Cruz  
-**Tecnologías principales:** React 18, Vite, React Router DOM v7, Context API, CSS Modules, React Paginate, React Hot Toast, React Icons, API ImgBB.
+- **Autor:** Leandro Victorino Cruz  
+- **Tecnologías principales:** React 18, Vite, React Router DOM v7, Firebase 10 (Auth & Firestore), Context API, CSS Modules, React Paginate, React Hot Toast, React Icons, API ImgBB.
 
 ---
 
 ## 🚀 Despliegue en Vivo y Repositorio
 
-- **Sitio Web (Deploy):** [https://ecommerce-talentotech-v1.vercel.app](https://ecommerce-talentotech-v1.vercel.app)
+- **Sitio Web (Deploy en Vercel):** [https://ecommerce-talentotech-v1.vercel.app](https://ecommerce-talentotech-v1.vercel.app)
 - **Repositorio en GitHub:** [https://github.com/Leo-apu/E-commerce_TalentoTech-v1](https://github.com/Leo-apu/E-commerce_TalentoTech-v1)
+
+---
+
+## 🔑 Credenciales para Evaluación (Cuentas de Prueba)
+
+Para probar la plataforma con los diferentes roles requeridos por la cátedra:
+
+| Rol | Correo Electrónico | Contraseña | Permisos y Acceso |
+| :--- | :--- | :--- | :--- |
+| **Administrador** | `admin@admin.com` | `admin123` | Acceso completo al panel `/admin` y `/admin/productos` (CRUD de catálogo con alta, edición y eliminación de productos). |
+| **Cliente** | `cliente@ejemplo.com` | `123456` | Navegación de catálogo, carrito, favoritos, personalización de perfil y compras. |
+
+> 💡 _También podés crear tu propia cuenta desde `/registro` (soporta carga de avatar a la nube) o iniciar sesión directamente con Google._
+
+---
+
+## 📋 Cumplimiento de Requerimientos de la Entrega
+
+### ✅ 1. Entrega Mínima
+- [x] **Todo lo visto hasta Pre-Entrega:** Listado de productos, detalle de producto y carrito global con contexto (`CartContext`).
+- [x] **Vista de productos en carrito:** Vista completa en `/carrito` con desglose, controles de cantidad, cálculo de envío y drawer lateral interactivo (`CartDrawer`).
+- [x] **Componente de alta de productos funcionando:** Modal interactivo para agregar nuevos productos con validación de campos y subida automática de imagen a ImgBB.
+- [x] **Conexión en tiempo real con Firebase:** `ItemListContainer` e `ItemDetailContainer` consumen directamente la base de datos de Cloud Firestore. Al crear un producto desde el panel de admin, este se refleja inmediatamente en el catálogo.
+- [x] **Configuración para producción:** Archivo `vercel.json` implementado en la raíz con reglas de reescritura (*rewrites*) para garantizar que rutas directas como `/admin` o `/carrito` funcionen sin error 404.
+
+### ✅ 2. Entrega Completa
+- [x] **Separación de layouts:** Arquitectura limpia con [`PublicLayout.jsx`](./src/layouts/PublicLayout.jsx) para la tienda pública y [`AdminLayout.jsx`](./src/layouts/AdminLayout.jsx) para el panel de administración.
+- [x] **Login para administrador:** Formulario de inicio de sesión conectado a Firebase Authentication.
+- [x] **Usuario administrador predeterminado:** Usuario `admin@admin.com` / `admin123` creado y operativo en Firebase.
+- [x] **AuthContext:** Contexto centralizado para la sesión, persistencia con `onAuthStateChanged`, login con email/password, registro y autenticación vía Google.
+- [x] **ProtectedRoute:** Protección de rutas mediante el componente `ProtectedRoute`, validando roles (`admin`) para restringir el acceso al dashboard y formulario de productos.
+
+### ⭐ 3. Extras Opcionales (CRUD Completo)
+- [x] **Editar productos:** Edición en vivo de título, precio, categoría, descripción y stock mediante modal pre-cargado.
+- [x] **Eliminar productos:** Eliminación de documentos en Firestore con confirmación contextual estilizada.
+- [x] **Dashboard administrativo:** Resumen de métricas comerciales, estado de inventario y alertas de stock bajo.
 
 ---
 
 ## 📌 Novedades y Funcionalidades del Sistema
 
-### 1. 🔐 Sistema de Autenticación y Cuentas de Usuario (`authService.js`)
+### 1. 🔐 Autenticación y Contexto (`AuthContext.jsx`)
+- Integración oficial con **Firebase Authentication** y **Cloud Firestore**.
+- Sincronización del estado de autenticación en tiempo real con `onAuthStateChanged`.
+- Almacenamiento y recuperación del perfil de usuario y rol (`admin` o `cliente`) desde la colección `users` en Firestore.
+- Soporte para inicio de sesión clásico y con proveedor **Google Sign-In**.
 
-- **Gestión de Sesiones:** Autenticación simulada completa con persistencia en `localStorage` y sincronización en tiempo real entre pestañas y componentes mediante eventos de almacenamiento (`storage`).
-- **Roles de Acceso:** Soporte para usuarios con rol `client` y rol `admin`.
-- **Módulo de Validaciones (`validateForm.js`):**
-  - Validación de correos electrónicos con expresiones regulares estandarizadas.
-  - Requerimientos de longitud mínima de contraseñas y coincidencia de confirmación.
-  - Validación estricta de archivos de imagen (formatos permitidos: JPG, PNG, WebP; tamaño máximo: 5 MB).
-- **Componentes de Autenticación Dedicados:**
-  - `LoginForm`: Formulario de acceso con opción de alternar visibilidad de contraseña (mostrar/ocultar), mensajes de error dinámicos y redirección inteligente al perfil.
-  - `RegisterForm`: Formulario de registro con previsualización en tiempo real de avatar, opción de eliminar foto y subida automática a la nube.
-  - `UserDropdown`: Menú flotante interactivo en el `Navbar` que detecta el estado de sesión: muestra la foto/avatar y nombre del usuario autenticado, enlaces rápidos a "Mi Perfil", "Cerrar Sesión" o botones para "Iniciar Sesión" y "Registrarse".
+### 2. 🛡️ Rutas Protegidas y Separación de Layouts
+- **`PublicLayout`**: Contiene la navegación principal (`Header`, `Navbar`, `CartDrawer`), contenedor `<main>` con `<Outlet />` y `Footer`.
+- **`AdminLayout`**: Layout exclusivo para administradores con barra lateral de navegación (*sidebar*), cabecera de métricas y área de trabajo.
+- **`ProtectedRoute`**: Componente de orden superior que comprueba el estado de carga (`loading`), si hay sesión activa y si el rol del usuario cuenta con los permisos necesarios (`allowedRoles={["admin"]}`).
 
-### 2. 👤 Perfil de Usuario Completo (`ProfilePage.jsx`)
+### 3. 📦 Catálogo Conectado a Cloud Firestore
+- **`ItemListContainer`**: Consulta dinámica a la colección `productos` en Firestore, con soporte para filtrado reactivo por categoría (`/categoria/:categoria`) mediante cláusulas `where()`.
+- **`ItemDetailContainer`**: Carga de producto individual por ID mediante `getDoc()`.
+- **Paginación avanzada:** Paginación accesible con `react-paginate` que conserva la posición en la navegación.
 
-- **Avatar Interactivo con la Nube:** Permite cambiar la foto de perfil en tiempo real seleccionando un archivo local que se sube automáticamente a **ImgBB** mediante `uploadImageToImgBB`, actualizando la sesión al instante.
-- **Estructura por Pestañas:**
-  - **Datos Personales:** Ficha con nombre completo, email, teléfono, DNI y rol de cuenta.
-  - **Direcciones:** Vista de la dirección de entrega predeterminada (calle, ciudad, provincia, código postal).
-  - **Configuración:** Vista de preferencias de cuenta (sección en construcción).
-  - **Mis Pedidos:** Historial de compras con acceso directo para explorar el catálogo si aún no se han registrado órdenes.
+### 4. ⚙️ Panel de Administración (`/admin` y `/admin/productos`)
+- **Gestión de Inventario:** Tabla con listado completo, filtros rápidos por categoría, búsqueda por nombre y etiquetas visuales de stock.
+- **Modal de Alta y Edición (`FormularioProductoModal.jsx`):** Formulario unificado para dar de alta nuevos productos o editar existentes, con validación de entradas y subida de imágenes a ImgBB.
+- **Eliminación:** Borrado seguro de documentos en Firebase Firestore (`deleteDoc`).
 
-### 3. ☁️ Integración con API de ImgBB (`imgbbService.js`)
+### 5. 🛒 Carrito de Compras (`CartContext.jsx`)
+- Estado global sincronizado que gestiona artículos, cantidades y cálculos de subtotales.
+- **CartDrawer:** Panel lateral desplegable que permite revisar la compra y visualizar la barra de progreso hacia el beneficio de **Envío Gratis** ($50.000).
+- **Página de Carrito (`/carrito`):** Vista completa y modularizada (`CartContent`, `CartEmpty`, `CartItem`, `CartSummary`).
 
-- Servicio desacoplado para la subida asíncrona de imágenes al servicio cloud de **ImgBB** (`https://api.imgbb.com/1/upload`).
-- Envío multipart mediante `FormData` autenticado con API Key configurada a través de variables de entorno de Vite (`VITE_IMGBB_API_KEY`).
-- Validación previa de tipo MIME y peso antes de realizar la petición HTTP para optimizar el ancho de banda y garantizar la estabilidad.
-
-### 4. 📦 Catálogo de Productos y Paginación Reactiva
-
-- **Paginación Avanzada con `react-paginate`:**
-  - Catálogo dividido en páginas de **12 productos** cada una.
-  - Controles de navegación _Anterior_ / _Siguiente_, botones numéricos de página y scroll suave automático al inicio de la lista al cambiar de página.
-  - **Preservación de Estado de Navegación:** Al ingresar a la vista detallada de un producto (`/producto/:id`) y regresar, la aplicación recuerda exactamente la página en la que se encontraba el usuario (`location.state`).
-- **Filtrado Dinámico:** Navegación por categorías (`/categoria/tecnologia`, `/categoria/indumentaria`, `/categoria/accesorios`) mediante `useParams`.
-- **Estados de Carga y Resiliencia:** Indicadores de carga nativos con spinner CSS y componentes de contingencia para resultados vacíos o errores de conexión con botón de reintento.
-
-### 5. ❤️ Sistema de Favoritos
-
-- Almacenamiento local persistente (`favorites`) para guardar artículos de interés haciendo clic en el icono de corazón en cada tarjeta o en el detalle.
-- Badge numérico en el `Navbar` actualizado en tiempo real.
-- Vista dedicada `/favoritos` con artículos guardados, eliminación rápida y acción directa para transferir productos al carrito de compras.
-
-### 6. 🛒 Carrito de Compras Dual (`CartContext.jsx`)
-
-- **Estado Global Reactivo:** Contexto unificado que almacena artículos, validación de existencia (`isInCart`), control de cantidades, subtotales y total general con persistencia en `localStorage`.
-- **CartWidget:** Indicador en la barra de navegación con contador de unidades.
-- **CartDrawer:** Panel lateral deslizable para revisar compras rápidas sin abandonar la página actual, con barra de progreso interactiva hacia el beneficio de **Envío Gratis**.
-- **Página Completa Modular (`/carrito`):**
-  - `CartEmpty`: Vista de contingencia con mensaje amigable y llamada a la acción hacia el catálogo cuando no hay artículos.
-  - `CartContent`: Desglose detallado de ítems, controles incrementales (+ / -), aviso de cuánto dinero resta para alcanzar el envío gratuito (a partir de $50.000), garantías de compra segura y botón de checkout.
-
-### 7. 🛡️ Panel de Administración (`AdminLayout.jsx` & `AdminDashboardPage.jsx`)
-
-- Layout independiente con barra lateral (_sidebar_) y encabezado con información de administrador.
-- **Métricas en Vivo:** Tarjetas con resumen de ventas mensuales, nuevos pedidos con órdenes pendientes de despacho, clientes activos y cantidad de productos en catálogo.
-- **Gestión de Catálogo:** Tabla con visualización de productos, categorías, precios formateados en moneda argentina (`$ ARS`), etiquetas de stock y botones de acción.
-- **Subrutas Preparadas:** Rutas dedicadas para `/admin`, `/admin/productos`, `/admin/pedidos` y `/admin/clientes`.
-
-### 8. ✨ Experiencia de Usuario y Microinteracciones
-
-- **Transiciones CSS Nativas:** Animaciones limpias y fluidas para modales, paneles y microinteracciones de hover.
-- **React Hot Toast:** Sistema de alertas y notificaciones contextuales estilizadas (agregado a carrito, favoritos, actualización de perfil, cierre de sesión, etc.).
-- **ScrollToTop:** Componente que restablece automáticamente el desplazamiento vertical a la parte superior en cada cambio de ruta.
+### 6. ☁️ Subida de Imágenes a ImgBB (`imgbbService.js`)
+- Subida asíncrona de archivos multimedia a la nube de **ImgBB** mediante `FormData` con clave de API configurada en entorno.
+- Validación de formatos (JPG, PNG, WebP) y límite de tamaño (máx. 5 MB) antes del envío.
 
 ---
 
-## 🛠️ Tecnologías y Librerías Utilizadas
+## 🛠️ Tecnologías Utilizadas
 
-| Tecnología                                                     | Propósito                                                                           |
-| :------------------------------------------------------------- | :---------------------------------------------------------------------------------- |
-| **[React 18](https://react.dev/)**                             | Biblioteca principal para interfaces de usuario declarativas basadas en componentes |
-| **[Vite 5](https://vitejs.dev/)**                              | Entorno de desarrollo ultrarrápido y empaquetador para producción                   |
-| **[React Router DOM v7](https://reactrouter.com/)**            | Enrutamiento declarativo del lado del cliente (SPA) con layouts anidados            |
-| **[React Paginate](https://github.com/AdeleD/react-paginate)** | Paginación interactiva y accesible de productos del catálogo                        |
-| **[React Hot Toast](https://react-hot-toast.com/)**            | Notificaciones flotantes y toasts de estado elegantes                               |
-| **[React Icons](https://react-icons.github.io/react-icons/)**  | Iconografía vectorial moderna basada en Feather Icons (`Fi`) y FontAwesome (`Fa`)   |
-| **[ImgBB API](https://api.imgbb.com/)**                        | Servicio en la nube para almacenamiento y hosting de imágenes de perfil y productos |
-| **[CSS Modules](https://github.com/css-modules/css-modules)**  | Estilos modulares encapsulados por componente, evitando colisiones de clases        |
+| Tecnología | Propósito |
+| :--- | :--- |
+| **[React 18](https://react.dev/)** | Biblioteca principal para interfaces de usuario reactivas |
+| **[Vite 5](https://vitejs.dev/)** | Bundler y servidor de desarrollo ultrarrápido |
+| **[Firebase 10](https://firebase.google.com/)** | Backend Serverless: Cloud Firestore (Base de datos) y Firebase Auth (Autenticación) |
+| **[React Router DOM v7](https://reactrouter.com/)** | Enrutamiento SPA, layouts anidados y rutas protegidas |
+| **[React Hot Toast](https://react-hot-toast.com/)** | Sistema de notificaciones emergentes |
+| **[React Paginate](https://github.com/AdeleD/react-paginate)** | Paginación interactiva del catálogo de productos |
+| **[React Icons](https://react-icons.github.io/react-icons/)** | Iconografía vectorial moderna (Feather Icons) |
+| **[ImgBB API](https://api.imgbb.com/)** | Alojamiento en la nube para imágenes de productos y perfiles |
+| **[CSS Modules](https://github.com/css-modules/css-modules)** | Modularización y encapsulamiento de estilos |
 
 ---
 
 ## 🗺️ Mapa de Rutas de la Aplicación
 
-### Rutas de la Tienda (Cliente)
+### Rutas Públicas (Bajo `PublicLayout`)
+| Ruta | Descripción |
+| :--- | :--- |
+| `/` | Portada con Banner, barra de beneficios, categorías destacadas y catálogo |
+| `/productos` | Catálogo completo con paginación interactiva |
+| `/categoria/:categoria` | Catálogo filtrado por categoría (`tecnologia`, `indumentaria`, `accesorios`) |
+| `/producto/:id` | Detalle del producto con selector de cantidad, cuotas y sellos de confianza |
+| `/carrito` | Página de resumen de carrito y cálculo de envío |
+| `/favoritos` | Listado de artículos guardados por el usuario |
+| `/login` | Formulario de acceso con correo y Google |
+| `/registro` | Formulario de registro con subida opcional de avatar |
+| `/perfil` | Panel privado de usuario (requiere inicio de sesión) |
+| `*` | Página 404 personalizada para URLs inexistentes |
 
-| Ruta                    | Descripción                                                                               |
-| :---------------------- | :---------------------------------------------------------------------------------------- |
-| `/`                     | Portada con Hero Banner, barra de beneficios, categorías destacadas y catálogo inicial    |
-| `/productos`            | Catálogo completo con paginación interactiva (12 productos por página)                    |
-| `/categoria/:categoria` | Catálogo filtrado por categoría (`tecnologia`, `indumentaria`, `accesorios`)              |
-| `/producto/:id`         | Detalle del producto con selector de cantidad, cuotas, sellos de garantía y favoritos     |
-| `/carrito`              | Página de resumen de compra, control de cantidades y progreso de envío gratis             |
-| `/favoritos`            | Listado de productos guardados por el usuario con opción de compra rápida                 |
-| `/login`                | Formulario de inicio de sesión de usuarios con validaciones                               |
-| `/registro`             | Formulario de registro con subida de foto de perfil a ImgBB                               |
-| `/perfil`               | Panel de usuario con pestañas: Mis Pedidos, Datos Personales, Direcciones y Configuración |
-| `*`                     | Página 404 personalizada para URLs inexistentes                                           |
-
-### Rutas del Panel de Control (Administración)
-
-- Solo es un mock de pagina de admin donde se va a implementar el panel de admin, no es funcional.
-  | Ruta | Descripción |
-  | :--- | :--- |
-  | `/admin` | Dashboard principal con métricas comerciales y tabla de catálogo |
-  | `/admin/productos` | Tabla de productos con opciones de edición y eliminación |
-  | `/admin/pedidos` | Mock de pedidos pendientes con información del cliente |
-  | `/admin/clientes` | Mock de lista de clientes registrados |
+### Rutas de Administración (Bajo `AdminLayout` y `ProtectedRoute`)
+| Ruta | Descripción |
+| :--- | :--- |
+| `/admin` | Dashboard principal con métricas comerciales y accesos directos |
+| `/admin/productos` | Gestión de catálogo: tabla, filtros, alta/edición de productos y eliminación |
+| `/admin/pedidos` | Resumen de pedidos del sistema |
+| `/admin/clientes` | Directorio de clientes |
 
 ---
 
@@ -134,128 +133,83 @@ Proyecto desarrollado para el curso de **Desarrollo Frontend con React** en **Ta
 ```text
 ecommerce/
 ├── public/
-│   ├── productos.json             # Catálogo de productos local con precios y descripciones
-│   └── usuarios.json              # Mock de usuarios de respaldo
+│   ├── productos.json             # Respaldo inicial de datos
+│   └── usuarios.json              # Mock de usuarios
 ├── src/
 │   ├── components/
-│   │   ├── Auth/
-│   │   │   ├── LoginForm/         # Formulario de inicio de sesión
-│   │   │   └── RegisterForm/      # Formulario de registro con subida de foto
-│   │   ├── Banner/                # Carrusel principal de promociones
-│   │   ├── BeneficiosBar/         # Barra de ventajas comerciales (envíos, cuotas, garantía)
-│   │   ├── CartDrawer/            # Panel lateral deslizante del carrito
-│   │   ├── CartWidget/            # Widget del carrito con contador para el Navbar
-│   │   ├── CategoriasDestacadas/  # Accesos directos a las categorías principales
-│   │   ├── Footer/                # Pie de página, medios de pago y datos del equipo
-│   │   ├── Header/                # Barra superior de anuncios
-│   │   ├── Item/                  # Tarjeta individual de producto con precio y cuotas
-│   │   ├── ItemDetail/            # Ficha técnica visual con selector de unidades y badges
-│   │   ├── ItemList/              # Cuadrícula con paginación integrada (ReactPaginate)
-│   │   ├── Navbar/                # Barra de navegación principal y enlaces
-│   │   ├── ScrollToTop/           # Reset de scroll automático al navegar
-│   │   └── UserDropdown/          # Menú desplegable de usuario (perfil / logout / login)
+│   │   ├── Auth/                  # Formularios de Login y Registro
+│   │   ├── common/                # Componentes reutilizables (Pagination, ProtectedRoute, ScrollToTop)
+│   │   ├── home/                  # Banner, BeneficiosBar, CategoriasDestacadas
+│   │   ├── layout/                # Header, Navbar, Footer, UserDropdown, CartDrawer, CartWidget
+│   │   └── product/               # Item, ItemDetail, ItemList
 │   ├── context/
-│   │   └── CartContext.jsx        # Estado global del carrito (Context API + localStorage)
-│   ├── data/
-│   │   └── usuarios.json          # Datos de usuarios de prueba (Admin y Cliente)
+│   │   ├── AuthContext.jsx        # Estado global de autenticación con Firebase Auth
+│   │   └── CartContext.jsx        # Estado global del carrito de compras
+│   ├── firebase/
+│   │   └── config.js              # Inicialización de Firebase (Firestore & Auth)
 │   ├── layouts/
-│   │   ├── Layout.jsx             # Layout maestro de la tienda (Header, Navbar, Drawer, Footer)
-│   │   └── AdminLayout.jsx        # Layout para el panel de administración con sidebar
+│   │   ├── PublicLayout.jsx       # Layout público de la tienda
+│   │   └── AdminLayout.jsx        # Layout administrativo con sidebar
 │   ├── pages/
-│   │   ├── Admin/                 # Dashboard y métricas administrativas
-│   │   ├── Cart/                  # Vista del carrito (CartPage, CartContent, CartEmpty)
-│   │   ├── Favoritos/             # Vista de productos guardados
-│   │   ├── Home/                  # Portada de la tienda
-│   │   ├── ItemDetailContainer/   # Contenedor de la vista de detalle
-│   │   ├── ItemListContainer/     # Contenedor de listado y filtrado por categoría
+│   │   ├── Admin/                 # Dashboard, AdminProductosPage y modal de creación/edición
+│   │   ├── Cart/                  # Página principal de carrito
+│   │   ├── Favoritos/             # Vista de favoritos
+│   │   ├── Home/                  # Portada
+│   │   ├── ItemDetailContainer/   # Detalle de producto conectado a Firestore
+│   │   ├── ItemListContainer/     # Catálogo con filtrado conectado a Firestore
 │   │   ├── Login/                 # Página de inicio de sesión
-│   │   ├── NotFound/              # Página de error 404 personalizada
-│   │   ├── Profile/               # Panel de perfil de usuario (datos, dirección, config)
-│   │   └── Register/              # Página de registro con carga de avatar
+│   │   ├── NotFound/              # Página 404
+│   │   ├── Profile/               # Perfil de usuario con pestañas
+│   │   └── Register/              # Registro de usuario
 │   ├── services/
-│   │   ├── authService.js         # Lógica de autenticación, sesión y actualización de perfil
-│   │   └── imgbbService.js        # Integración con la API de subida de imágenes de ImgBB
+│   │   └── imgbbService.js        # Servicio de subida de imágenes a ImgBB
 │   ├── utils/
-│   │   └── validateForm.js        # Reglas de validación para formularios y archivos
-│   ├── App.jsx                    # Configuración central de rutas y Providers
-│   ├── index.css                  # Variables CSS, tokens de diseño y reset global
+│   │   └── validateForm.js        # Validadores de formularios
+│   ├── App.jsx                    # Configuración de rutas y layout wrappers
+│   ├── index.css                  # Variables globales y estilos base
 │   └── main.jsx                   # Punto de entrada de la aplicación
-├── .env                           # Variables de entorno locales (Ignorado en git)
-├── .env.example                   # Plantilla de variables de entorno requeridas
-├── index.html                     # Plantilla HTML con tipografías y metadatos
-├── package.json                   # Dependencias y scripts del proyecto
-├── vite.config.js                 # Configuración del empaquetador Vite
-└── README.md                      # Documentación completa del proyecto
+├── .env.example                   # Plantilla de variables de entorno
+├── index.html                     # HTML raíz con metadatos
+├── package.json                   # Dependencias y scripts
+├── vercel.json                    # Configuración de rewrites para despliegue en Vercel
+└── vite.config.js                 # Configuración de Vite
 ```
-
----
-
-## 🔑 Cuentas de Prueba (Credenciales Demo)
-
-Para probar los diferentes roles y accesos sin necesidad de registrar un nuevo usuario:
-
-| Rol               | Correo Electrónico    | Contraseña | Acceso                                         |
-| :---------------- | :-------------------- | :--------- | :--------------------------------------------- |
-| **Administrador** | `leandro@ejemplo.com` | `123456`   | Perfil completo y acceso al panel `/admin`     |
-| **Cliente**       | `sol@ejemplo.com`     | `123456`   | Compras, favoritos y personalización de perfil |
-
-> 💡 _También puedes crear cualquier cuenta nueva desde `/registro` y opcionalmente subir tu propia foto de perfil._
 
 ---
 
 ## 💻 Instalación y Ejecución Local
 
 ### 1. Clonar el repositorio
-
 ```bash
-git clone https://github.com/TU_USUARIO/TU_REPOSITORIO.git
-cd TU_REPOSITORIO
+git clone https://github.com/Leo-apu/E-commerce_TalentoTech-v1.git
+cd E-commerce_TalentoTech-v1
 ```
 
 ### 2. Instalar dependencias
-
 ```bash
-npm install
-# o si utilizas pnpm:
 pnpm install
+# o con npm:
+npm install
 ```
 
 ### 3. Configurar variables de entorno
-
 Crea un archivo `.env` en la raíz del proyecto basándote en `.env.example`:
-
-```bash
-cp .env.example .env
-```
-
-Edita `.env` con tu clave gratuita de [ImgBB API](https://api.imgbb.com/):
-
 ```env
 VITE_IMGBB_API_KEY=tu_api_key_aqui
 ```
 
 ### 4. Iniciar el servidor de desarrollo
-
 ```bash
-npm run dev
-# o con pnpm:
 pnpm dev
+# o con npm:
+npm run dev
 ```
 
-Abre en tu navegador la dirección indicada en la consola (por defecto: `http://localhost:5173`).
-
-### 5. Compilación para producción
-
-Para compilar y verificar el bundle optimizado para producción:
-
+### 5. Compilar para producción
 ```bash
+pnpm build
+# o con npm:
 npm run build
-```
-
-Para previsualizar la compilación de producción localmente:
-
-```bash
-npm run preview
 ```
 
 ---
@@ -263,5 +217,5 @@ npm run preview
 ## 👨‍💻 Autor
 
 - **Leandro Victorino Cruz**
-- Curso: **Desarrollo Frontend con React** - _Talento Tech_
+- Curso: **Desarrollo Frontend con React** — _Talento Tech_
 - Año: 2026

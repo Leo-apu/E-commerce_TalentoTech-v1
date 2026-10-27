@@ -1,6 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
-import Layout from "./layouts/Layout.jsx";
+import PublicLayout from "./layouts/PublicLayout.jsx";
 import AdminLayout from "./layouts/AdminLayout.jsx";
 import HomePage from "./pages/Home/HomePage.jsx";
 import ItemListContainer from "./pages/ItemListContainer/ItemListContainer.jsx";
@@ -43,7 +43,7 @@ function App() {
       />
 
       <Routes>
-        <Route element={<Layout />}>
+        <Route element={<PublicLayout />}>
           <Route path="/" element={<HomePage />} />
           <Route path="/productos" element={<ItemListContainer />} />
           <Route path="/categoria/:categoria" element={<ItemListContainer />} />
