@@ -3,6 +3,7 @@ import { NavLink, Link, useLocation } from "react-router-dom";
 import { FiMenu, FiX, FiHeart, FiSettings } from "react-icons/fi";
 import CartWidget from "../CartWidget/CartWidget.jsx";
 import UserDropdown from "../UserDropdown/UserDropdown.jsx";
+import SearchBar from "../SearchBar/SearchBar.jsx";
 import { useAuth } from "../../../context/AuthContext.jsx";
 import styles from "./Navbar.module.css";
 
@@ -88,6 +89,8 @@ function Navbar() {
             </NavLink>
           </li>
         </ul>
+
+        <SearchBar />
 
         <div className={styles.iconos}>
           {user?.rol === "admin" && (

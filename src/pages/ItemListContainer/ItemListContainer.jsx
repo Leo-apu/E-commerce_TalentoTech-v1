@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
-import { FiAlertCircle, FiInbox } from "react-icons/fi";
+import { useParams, useSearchParams, Link } from "react-router-dom";
+import { FiAlertCircle, FiInbox, FiSearch, FiX } from "react-icons/fi";
 import ItemList from "../../components/product/ItemList/ItemList.jsx";
 import styles from "./ItemListContainer.module.css";
 
@@ -9,6 +9,9 @@ import { db } from "../../firebase/config.js";
 
 function ItemListContainer() {
   const { categoria } = useParams();
+  const [searchParams] = useSearchParams();
+  const busqueda = searchParams.get("q")?.trim() || "";
+
   const [productos, setProductos] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
@@ -39,6 +42,16 @@ function ItemListContainer() {
         setCargando(false);
       });
   }, [categoria]);
+
+  const productosVisibles = busqueda
+    ? productos.filter((p) => {
+        const queryTerm = busqueda.toLowerCase();
+        const matchNombre = p.nombre?.toLowerCase().includes(queryTerm);
+        const matchDesc = p.descripcion?.toLowerCase().includes(queryTerm);
+        const matchCat = p.categoria?.toLowerCase().includes(queryTerm);
+        return matchNombre || matchDesc || matchCat;
+      })
+    : productos;
 
   if (cargando) {
     return (
@@ -82,17 +95,57 @@ function ItemListContainer() {
     );
   }
 
+  if (busqueda && productosVisibles.length === 0) {
+    return (
+      <div className={styles.estadoMensaje}>
+        <div className={styles.iconoVacio}>
+          <FiSearch size={44} />
+        </div>
+        <h3>No encontramos resultados</h3>
+        <p>
+          No hay productos que coincidan con "<strong>{busqueda}</strong>".
+          Probá con otras palabras clave o revisá la ortografía.
+        </p>
+        <Link to="/productos" className={styles.botonVolverInicio}>
+          Ver todos los productos
+        </Link>
+      </div>
+    );
+  }
+
   return (
     <div className={styles.contenedor}>
-      {categoria && (
-        <div className={styles.cabeceraCategoria}>
-          <h2 className={styles.tituloCategoria}>{categoria}</h2>
-          <span className={styles.conteoCategoria}>
-            {productos.length} productos disponibles
-          </span>
+      {busqueda ? (
+        <div className={styles.cabeceraBusqueda}>
+          <div>
+            <h2 className={styles.tituloBusqueda}>
+              Resultados para <span>"{busqueda}"</span>
+            </h2>
+            <span className={styles.conteoCategoria}>
+              {productosVisibles.length}{" "}
+              {productosVisibles.length === 1
+                ? "producto encontrado"
+                : "productos encontrados"}
+            </span>
+          </div>
+          <Link
+            to={categoria ? `/categoria/${categoria}` : "/productos"}
+            className={styles.btnLimpiarBusqueda}
+          >
+            <FiX size={15} /> Limpiar búsqueda
+          </Link>
         </div>
+      ) : (
+        categoria && (
+          <div className={styles.cabeceraCategoria}>
+            <h2 className={styles.tituloCategoria}>{categoria}</h2>
+            <span className={styles.conteoCategoria}>
+              {productosVisibles.length} productos disponibles
+            </span>
+          </div>
+        )
       )}
-      <ItemList productos={productos} />
+      <ItemList productos={productosVisibles} />
     </div>
   );
 }

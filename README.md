@@ -89,6 +89,10 @@ Para facilitar la corrección y evaluación de los diferentes roles y permisos d
 - **`ItemDetailContainer`:**
   - Obtiene el documento específico por ID mediante `getDoc(doc(db, "productos", id))`.
   - Vista detallada con selector de cantidad, cálculo de cuotas sin interés, sellos de confianza y botón para agregar al carrito o favoritos.
+- **Buscador en Tiempo Real (`SearchBar.jsx`):**
+  - Componente de búsqueda integrado en el `Navbar` con diseño *pill* moderno, icono interactivo y botón de borrado rápido (`(X)`).
+  - Filtrado reactivo en `ItemListContainer` mediante parámetros de URL (`/productos?q=termino`), buscando coincidencias en nombre, categoría y descripción.
+  - Encabezado dinámico con conteo de resultados, botón para limpiar la búsqueda y pantalla de estado amigable con llamada a la acción ante búsquedas sin coincidencias.
 - **Paginación Reactiva (`react-paginate`):**
   - Catálogo dividido en páginas de **12 productos**.
   - Controles de navegación *Anterior* / *Siguiente*, botones numéricos y scroll suave automático al inicio.
@@ -156,7 +160,7 @@ Para facilitar la corrección y evaluación de los diferentes roles y permisos d
 | Ruta | Componente | Descripción |
 | :--- | :--- | :--- |
 | `/` | `HomePage` | Portada con Hero Banner, barra de beneficios, categorías destacadas y catálogo inicial |
-| `/productos` | `ItemListContainer` | Catálogo completo con paginación interactiva (12 productos por página) |
+| `/productos` | `ItemListContainer` | Catálogo completo con paginación interactiva y soporte para búsqueda por palabras clave (`?q=termino`) |
 | `/categoria/:categoria` | `ItemListContainer` | Catálogo filtrado por categoría (`tecnologia`, `indumentaria`, `accesorios`) |
 | `/producto/:id` | `ItemDetailContainer` | Detalle del producto con selector de cantidad, cuotas, sellos de garantía y favoritos |
 | `/carrito` | `CartPage` | Página de resumen de compra, control de cantidades y progreso de envío gratis |
@@ -202,6 +206,7 @@ ecommerce/
 │   │   │   ├── Footer/            # Pie de página y enlaces institucionales
 │   │   │   ├── Header/            # Barra superior de anuncios
 │   │   │   ├── Navbar/            # Barra de navegación principal y buscador
+│   │   │   ├── SearchBar/         # Barra de búsqueda con filtrado en tiempo real y botón de reset
 │   │   │   └── UserDropdown/      # Menú desplegable de usuario (perfil / logout / login)
 │   │   └── product/
 │   │       ├── Item/              # Tarjeta de producto con precio, cuotas y favoritos
