@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FiUserPlus } from "react-icons/fi";
+import { FcGoogle } from "react-icons/fc";
 import toast from "react-hot-toast";
 
 import RegisterForm from "../../components/Auth/RegisterForm/RegisterForm.jsx";
@@ -9,11 +10,12 @@ import {
   uploadImageToImgBB,
   validateImageFile,
 } from "../../services/imgbbService.js";
-import { registerUser, getCurrentUser } from "../../services/authService.js";
+import { useAuth } from "../../context/AuthContext.jsx";
 import styles from "./RegisterPage.module.css";
 
 function RegisterPage() {
   const navigate = useNavigate();
+  const { user, registerWithEmail, loginWithGoogle } = useAuth();
 
   const [formData, setFormData] = useState({
     nombre: "",
@@ -25,13 +27,14 @@ function RegisterPage() {
   const [avatarPreview, setAvatarPreview] = useState(null);
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isGoogleSubmitting, setIsGoogleSubmitting] = useState(false);
   const [estadoSubida, setEstadoSubida] = useState("");
 
   useEffect(() => {
-    if (getCurrentUser()) {
+    if (user) {
       navigate("/perfil");
     }
-  }, [navigate]);
+  }, [user, navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -97,22 +100,44 @@ function RegisterPage() {
       }
 
       setEstadoSubida("Creando tu cuenta...");
-      const nuevoUsuario = await registerUser({
+      await registerWithEmail({
         nombre: formData.nombre,
         email: formData.email,
         password: formData.password,
         avatarUrl: avatarUrl,
       });
 
-      toast.success(`¡Registro exitoso! Bienvenido, ${nuevoUsuario.nombre}`);
+      toast.success(`¡Registro exitoso! Bienvenido, ${formData.nombre}`);
       navigate("/perfil");
     } catch (err) {
       console.error(err);
-      setErrors({ general: err.message || "Error al completar el registro" });
-      toast.error(err.message || "Error al completar el registro");
+      let mensajeError = "Error al completar el registro";
+      if (err.code === "auth/email-already-in-use") {
+        mensajeError = "Ya existe una cuenta registrada con este correo.";
+      } else if (err.code === "auth/weak-password") {
+        mensajeError = "La contraseña es muy débil (mínimo 6 caracteres).";
+      }
+      setErrors({ general: mensajeError });
+      toast.error(mensajeError);
     } finally {
       setIsSubmitting(false);
       setEstadoSubida("");
+    }
+  };
+
+  const handleGoogleSignup = async () => {
+    setIsGoogleSubmitting(true);
+    try {
+      await loginWithGoogle();
+      toast.success("¡Cuenta creada/iniciada con Google!");
+      navigate("/perfil");
+    } catch (err) {
+      console.error(err);
+      if (err.code !== "auth/popup-closed-by-user") {
+        toast.error("Error al registrarse con Google");
+      }
+    } finally {
+      setIsGoogleSubmitting(false);
     }
   };
 
@@ -127,6 +152,24 @@ function RegisterPage() {
           <p className={styles.subtitulo}>
             Regístrate para comprar y personalizar tu perfil
           </p>
+        </div>
+
+        <button
+          type="button"
+          className={styles.botonGoogle}
+          onClick={handleGoogleSignup}
+          disabled={isGoogleSubmitting || isSubmitting}
+        >
+          <FcGoogle size={20} />
+          <span>
+            {isGoogleSubmitting
+              ? "Conectando con Google..."
+              : "Registrarme con Google"}
+          </span>
+        </button>
+
+        <div className={styles.divisor}>
+          <span>o completa tus datos</span>
         </div>
 
         <RegisterForm
@@ -155,3 +198,4 @@ function RegisterPage() {
 }
 
 export default RegisterPage;
+

@@ -63,3 +63,42 @@ export function validateRegisterForm(values = {}) {
 
   return errors;
 }
+
+export function validateProductForm(values = {}) {
+  const errors = {};
+  const nombre = values.nombre?.trim() || "";
+  const precio = Number(values.precio);
+  const stock = Number(values.stock);
+  const categoria = values.categoria?.trim() || "";
+  const descripcion = values.descripcion?.trim() || "";
+
+  if (!nombre) {
+    errors.nombre = "El nombre del producto es obligatorio";
+  } else if (nombre.length < 3) {
+    errors.nombre = "El nombre debe tener al menos 3 caracteres";
+  }
+
+  if (values.precio === "" || values.precio === undefined || isNaN(precio) || precio <= 0) {
+    errors.precio = "Ingresa un precio válido mayor a $0";
+  }
+
+  if (values.stock === "" || values.stock === undefined || isNaN(stock) || stock < 0) {
+    errors.stock = "El stock no puede ser negativo";
+  }
+
+  if (!categoria) {
+    errors.categoria = "Debes seleccionar una categoría";
+  }
+
+  if (!descripcion) {
+    errors.descripcion = "La descripción del producto es requerida";
+  } else if (descripcion.length < 5) {
+    errors.descripcion = "La descripción debe tener al menos 5 caracteres";
+  }
+
+  if (!values.imagenFile && !values.imagenUrl?.trim()) {
+    errors.imagen = "Debes subir una imagen o ingresar una URL";
+  }
+
+  return errors;
+}
